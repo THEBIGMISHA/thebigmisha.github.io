@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Михаил Николаев | thebigmisha</title>
+    <style>
+        /* Cyberpunk Theme Variables */
+        :root {
+            --primary: #00ff88;
+            --secondary: #ff00ff;
+            --accent: #00ffff;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --light: #ffffff;
+            --glow-primary: 0 0 15px #00ff88, 0 0 30px #00ff88;
+            --glow-secondary: 0 0 15px #ff00ff, 0 0 30px #ff00ff;
+            --glow-accent: 0 0 15px #00ffff, 0 0 30px #00ffff;
+            --scanline: linear-gradient(rgba(0,255,136,0.1) 50%, transparent 50%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--darker);
+            color: var(--light);
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--scanline);
+            background-size: 100% 4px;
+            z-index: -1;
+            animation: scan 8s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes scan {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Gothic-style font for name */
+        .name-title {
+            font-family: "Times New Roman", Times, serif;
+            font-weight: bold;
+            font-size: 4.5rem;
+            margin: 60px auto 20px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            letter-spacing: 2px;
+            text-align: center;
+            max-width: 900px;
+            line-height: 1.1;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: popIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .nickname {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            text-shadow: var(--glow-secondary);
+            margin: 0 auto 50px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            opacity: 0;
+            animation: slideInFromTop 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes slideInFromTop {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nickname {
+            transform: translateY(-30px);
+        }
+
+        /* Section Styles */
+        section {
+            margin: 60px 0;
+            padding: 40px;
+            background: rgba(10, 10, 15, 0.7);
+            border: 1px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-shadow: var(--glow-primary);
+            position: relative;
+            display: inline-block;
+            font-family: "Times New Roman", Times, serif;
+            font-weight: bold;
+        }
+
+        h2::after {
+            content: '_';
+            animation: cursor 1s infinite;
+        }
+
+        @keyframes cursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .skill-card {
+            background: rgba(5, 5, 8, 0.8);
+            border: 1px solid var(--accent);
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow-accent);
+            border-color: var(--secondary);
+        }
+
+        .skill-card.visible {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .skill-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            font-family: "Times New Roman", Times, serif;
+            font-weight: bold;
+        }
+
+        .skill-card p {
+            color: var(--light);
+            font-size: 0.9rem;
+        }
+
+        /* Projects */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .project-card {
+            background: rgba(5, 5, 8, 0.8);
+            border: 1px solid var(--secondary);
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        .project-card:hover {
+            transform: scale(1.02);
+            box-shadow: var(--glow-secondary);
+            border-color: var(--primary);
+        }
+
+        .project-card.visible {
+            animation: zoomIn 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+
+        .project-card h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            font-family: "Times New Roman", Times, serif;
+            font-weight: bold;
+        }
+
+        .project-card p {
+            color: var(--light);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .tech-tag {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid var(--primary);
+        }
+
+        /* Contact */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(5, 5, 8, 0.8);
+            border: 1px solid var(--accent);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        .contact-item:hover {
+            transform: translateX(10px);
+            box-shadow: var(--glow-accent);
+            border-color: var(--secondary);
+        }
+
+        .contact-item.visible {
+            animation: slideInFromLeft 0.7s ease-out forwards;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--darker);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .contact-text {
+            color: var(--light);
+        }
+
+        .contact-text a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .contact-text a:hover {
+            color: var(--secondary);
+            text-shadow: var(--glow-secondary);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 1px solid var(--primary);
+            position: relative;
+            opacity: 0;
+        }
+
+        footer.visible {
+            animation: fadeIn 1.2s ease-out forwards;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--secondary);
+            color: var(--darker);
+            transform: rotate(360deg);
+            box-shadow: var(--glow-secondary);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .name-title {
+                font-size: 2.8rem;
+                padding: 0 20px;
+            }
+            .nickname {
+                font-size: 1.4rem;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            section {
+                padding: 25px;
+                margin: 40px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .name-title {
+                font-size: 2.2rem;
+            }
+            .skills-grid, .projects-grid, .contact-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="name-title">МИХАИЛ НИКОЛАЕВ</h1>
+            <div class="nickname">@thebigmisha</div>
+        </header>
+
+        <section id="about">
+            <h2>ОБО МНЕ</h2>
+            <p>Привет! Я Михаил Николаев (thebigmisha) — системный администратор с 3-летним опытом в настройке и поддержке Linux-инфраструктуры, сетевых решений и базовой безопасности.</p>
+            <p>Работаю преимущественно с дистрибутивами Ubuntu, Arch, Fedora и ALT Linux. Уверенно настраиваю сети, применяю LUKS для шифрования и UFW для базовой защиты. Пишу скрипты на Bash и Python для автоматизации рутинных задач.</p>
+        </section>
+
+        <section id="skills">
+            <h2>НАВЫКИ</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>Linux</h3>
+                    <p>Ubuntu, Arch, Fedora, ALT Linux, системная настройка</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Сети</h3>
+                    <p>Настройка и диагностика сетевой инфраструктуры</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Безопасность</h3>
+                    <p>LUKS (шифрование дисков), UFW (брандмауэр)</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Автоматизация</h3>
+                    <p>Python, Bash, cron, системные скрипты</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Инструменты</h3>
+                    <p>SSH, GPG, systemd, journalctl, pacman/apt/dnf</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Поддержка</h3>
+                    <p>Настройка пользовательских сервисов, техническая поддержка</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2>ПРОЕКТЫ</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>Matrix сервер</h3>
+                    <p>Полностью настроенный и работающий сервер Matrix по адресу <a href="https://matrix.thebigmisha.ru" target="_blank" style="color:var(--primary)">matrix.thebigmisha.ru</a> для использования с клиентом Element.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Matrix</span>
+                        <span class="tech-tag">Linux</span>
+                        <span class="tech-tag">SSL</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>КОНТАКТЫ</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">🐙</div>
+                    <div class="contact-text">
+                        <a href="https://github.com/thebigmisha" target="_blank">github.com/thebigmisha</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">💬</div>
+                    <div class="contact-text">
+                        <a href="https://t.me/thebigmisha" target="_blank">t.me/thebigmisha</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">▶️</div>
+                    <div class="contact-text">
+                        <a href="https://www.youtube.com/@THEBIGMISHA_OFFICIAL" target="_blank">youtube.com/@THEBIGMISHA_OFFICIAL</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="social-links">
+                <a href="https://github.com/thebigmisha" class="social-link" target="_blank">GH</a>
+                <a href="https://t.me/thebigmisha" class="social-link" target="_blank">TG</a>
+                <a href="https://www.youtube.com/@THEBIGMISHA_OFFICIAL" class="social-link" target="_blank">YT</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate sections with different delays and effects
+            const sections = document.querySelectorAll('section');
+            sections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.style.opacity = '1';
+                    section.style.animation = 'fadeInUp 0.8s ease-out';
+
+                    // Animate skill cards
+                    if (section.id === 'skills') {
+                        const cards = section.querySelectorAll('.skill-card');
+                        cards.forEach((card, i) => {
+                            setTimeout(() => {
+                                card.classList.add('visible');
+                            }, i * 100);
+                        });
+                    }
+
+                    // Animate project cards
+                    if (section.id === 'projects') {
+                        const cards = section.querySelectorAll('.project-card');
+                        cards.forEach((card, i) => {
+                            setTimeout(() => {
+                                card.classList.add('visible');
+                            }, i * 200);
+                        });
+                    }
+
+                    // Animate contact items
+                    if (section.id === 'contact') {
+                        const items = section.querySelectorAll('.contact-item');
+                        items.forEach((item, i) => {
+                            setTimeout(() => {
+                                item.classList.add('visible');
+                            }, i * 150);
+                        });
+                    }
+                }, 300 + index * 400);
+            });
+
+            // Animate footer
+            setTimeout(() => {
+                document.querySelector('footer').classList.add('visible');
+            }, 2500);
+        });
+    </script>
+</body>
+</html>
